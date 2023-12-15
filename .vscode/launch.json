@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Hypothetical Table",
+            "type": "python",
+            "request": "launch",
+            "module": "scripts.table",
+            "justMyCode": true,
+            "args": [
+                "./tests/configuration.json"
+            ]
+        }
+    ]
+}
