@@ -5,7 +5,7 @@ Compare model runs from arbitrary lists of summarised results.
 """
 import pandas as pd
 from typing import Dict, Tuple, List, Optional
-from .methods import generate_wish_list
+from .methods import create_wish_list, match_source_with_wish_list
 from .datatypes import Record, Filter, Group
 
 
@@ -18,9 +18,9 @@ def create_tables(
     """
     Produce a list of tables (dataframes) of compared results.
     """
-    wish_list = generate_wish_list(data, scenarios, filters)
-    return wish_list
-    # table = match_source_with_wish_list(source, wish_list)
+    wish_list = create_wish_list(data, scenarios, filters)
+    table = match_source_with_wish_list(data, wish_list)
+    return table
     # table = make_comparisons(table)
     # tables = group_tables(table, groupings)
     # return tables

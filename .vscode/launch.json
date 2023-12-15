@@ -5,11 +5,17 @@
             "name": "Hypothetical Table",
             "type": "python",
             "request": "launch",
-            "module": "scripts.table",
+            "module": "scripts.wishlist",
             "justMyCode": true,
-            "args": [
-                "./tests/configuration.json"
-            ]
+            "args": [ ]
+        },
+        {
+            "name": "Matched Table",
+            "type": "python",
+            "request": "launch",
+            "module": "scripts.matched",
+            "justMyCode": true,
+            "args": []
         }
     ]
 }

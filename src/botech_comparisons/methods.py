@@ -12,7 +12,7 @@ from botech_metadata import countries as metadata
 from itertools import product
 
 
-def generate_wish_list(
+def create_wish_list(
     df: pd.DataFrame,
     scenarios: Tuple[str],
     filters: Optional[Dict[Filter, List[str]]] = None
@@ -63,14 +63,16 @@ def determine_filtered_values(
 
 def filter_countries(filters: Dict[Filter, List[str]]) -> List[Country]:
     "Collect all possible countries that could be included."
-    countries = _country_records
     if filters:
         if Filter.COUNTRY in filters:
-            countries = [
-                metadata.get(country).alpha3
-                for country in filters[Filter.COUNTRY]
-            ]
-    return countries
+            countries = []
+            for country in filters[Filter.COUNTRY]:
+                try:
+                    countries.append(metadata.get(country).alpha2)
+                except KeyError:
+                    pass
+            return countries
+    return _country_records
 
 
 def create_all_record_combinations(
@@ -102,3 +104,20 @@ def create_all_record_combinations(
         records.append(record)
 
     return records
+
+
+def match_source_with_wish_list(
+    source: pd.DataFrame,
+    wish_list: List[Record]
+) -> pd.DataFrame:
+    """
+    Match a source of data with a wish list of records.
+    """
+    target = pd.DataFrame(wish_list)
+    condition = (
+        source['AUTHOR'].isin(target['AUTHOR']) &
+        source['COUNTRY'].isin(target['COUNTRY']) &
+        source['INTERVENTION'].isin(target['INTERVENTION']) &
+        source['SCENARIO'].isin(target['SCENARIO'])
+    )
+    return source[condition]

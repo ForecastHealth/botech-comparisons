@@ -4,7 +4,7 @@ datatypes.py
 Defining our datastructures
 """
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import datetime
 
 
@@ -17,6 +17,22 @@ class Record:
     TIMESTAMP: datetime.datetime
     EFFECTS: float
     COSTS: float
+
+
+@dataclass
+class Comparison:
+    AUTHOR: str
+    COUNTRY: str
+    INTERVENTION: str
+    SCENARIO_ONE: str
+    SCENARIO_TWO: str
+    TIMESTAMP: datetime.datetime
+    NET_EFFECTS: float
+    NET_COSTS: float
+    COST_EFFECTIVENESS: float = field(init=False)
+
+    def __post_init__(self):
+        self.COST_EFFECTIVENESS = self.NET_EFFECTS / self.NET_COSTS
 
 
 class Group(Enum):

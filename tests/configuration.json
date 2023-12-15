@@ -1,6 +1,6 @@
 {
 	"scenarios": [true, false],
 	"filters": {
-		"country": ["US"]
+		"country": ["USA"]
 	}
 }
