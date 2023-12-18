@@ -1,5 +1,5 @@
 {
-	"scenarios": [true, false],
+	"scenarios": [0, 1],
 	"filters": {
 		"country": ["USA"]
 	}
