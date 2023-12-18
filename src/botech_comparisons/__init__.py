@@ -5,8 +5,11 @@ Compare model runs from arbitrary lists of summarised results.
 """
 import pandas as pd
 from typing import Dict, Tuple, List, Optional
-from .methods import create_wish_list, match_source_with_wish_list
-from .datatypes import Record, Filter, Group
+from .methods import (
+    create_wish_list,
+    create_realistic_table
+)
+from .datatypes import Filter, Group
 
 
 def create_tables(
@@ -19,7 +22,7 @@ def create_tables(
     Produce a list of tables (dataframes) of compared results.
     """
     wish_list = create_wish_list(data, scenarios, filters)
-    table = match_source_with_wish_list(data, wish_list)
+    table = create_realistic_table(data, wish_list, scenarios)
     return table
     # table = make_comparisons(table)
     # tables = group_tables(table, groupings)
@@ -33,7 +36,6 @@ def parse_configuration(
     Given a configuration, return the appropriate data structures.
     """
     scenarios = tuple(configuration["scenarios"])
-
     if "filters" in configuration:
         filters = {
             Filter[filter.upper()]: values
@@ -53,6 +55,6 @@ def parse_configuration(
 
 
 __all__ = [
-    "create_table",
+    "create_tables",
     "parse_configuration"
 ]

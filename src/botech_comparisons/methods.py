@@ -4,7 +4,7 @@ methods.py
 Methods to assist the botech-comparison API.
 """
 from typing import Tuple, Dict, List, Optional
-from .datatypes import Record, Filter, Group
+from .datatypes import Record, Filter
 import pandas as pd
 from botech_metadata import _records as _country_records
 from botech_metadata.countries import Country
@@ -106,6 +106,20 @@ def create_all_record_combinations(
     return records
 
 
+def create_realistic_table(
+    df: pd.DataFrame,
+    wish_list: List[Record],
+    scenarios: Tuple[str]
+) -> pd.DataFrame:
+    """
+    Create a list of records with all data requirements.
+    """
+    table = match_source_with_wish_list(df, wish_list)
+    remove_invalid_comparisons(table, scenarios)
+    remove_older_entries(table)
+    return table
+
+
 def match_source_with_wish_list(
     source: pd.DataFrame,
     wish_list: List[Record]
@@ -121,3 +135,21 @@ def match_source_with_wish_list(
         source['SCENARIO'].isin(target['SCENARIO'])
     )
     return source[condition]
+
+
+def remove_invalid_comparisons(df: pd.DataFrame, scenarios: Tuple[str]):
+    """
+    For each AUTHOR, COUNTRY, INTERVENTION,
+    if both scenarios are not present, remove those rows.
+    Keep only the most recent entry for each scenario.
+    """
+    scenario_one, scenario_two = scenarios
+    df = df.groupby(['AUTHOR', 'COUNTRY', 'INTERVENTION'])
+    df = df.filter(lambda x: (x['SCENARIO'] == scenario_one).any() and (x['SCENARIO'] == scenario_two).any())
+
+
+def remove_older_entries(df: pd.DataFrame):
+    df["TIMESTAMP"] = pd.to_datetime(df["TIMESTAMP"])
+    df = df.groupby(['AUTHOR', 'COUNTRY', 'INTERVENTION', 'SCENARIO'])
+    df = df.apply(lambda x: x.nlargest(1, 'TIMESTAMP'))
+    df = df.reset_index(drop=True)
