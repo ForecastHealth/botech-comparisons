@@ -29,11 +29,17 @@ class Comparison:
     INTERVENTION: str
     SCENARIO_ONE: str
     SCENARIO_TWO: str
-    NET_EFFECTS: float
-    NET_COSTS: float
+    SCENARIO_ONE_EFFECTS: float
+    SCENARIO_TWO_EFFECTS: float
+    SCENARIO_ONE_COSTS: float
+    SCENARIO_TWO_COSTS: float
+    NET_EFFECTS: float = field(init=False)
+    NET_COSTS: float = field(init=False)
     COST_EFFECTIVENESS: float = field(init=False)
 
     def __post_init__(self):
+        self.NET_EFFECTS = self.SCENARIO_TWO_EFFECTS - self.SCENARIO_ONE_EFFECTS
+        self.NET_COSTS = self.SCENARIO_TWO_COSTS - self.SCENARIO_ONE_COSTS
         self.COST_EFFECTIVENESS = self.NET_EFFECTS / self.NET_COSTS
 
 

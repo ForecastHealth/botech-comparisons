@@ -32,8 +32,6 @@ def create_comparisons(
                 & (df['SCENARIO'] == scenario_two)
             ]
             match_row = match.iloc[0]
-            net_effects = match_row['EFFECTS'] - row['EFFECTS']
-            net_costs = match_row['COSTS'] - row['COSTS']
             country = row["COUNTRY"]
             country_object = metadata.get(country)
             region = country_object.region
@@ -48,8 +46,10 @@ def create_comparisons(
                 INTERVENTION=row['INTERVENTION'],
                 SCENARIO_ONE=str(scenario_one),
                 SCENARIO_TWO=str(scenario_two),
-                NET_EFFECTS=net_effects,
-                NET_COSTS=net_costs
+                SCENARIO_ONE_EFFECTS=row['EFFECTS'],
+                SCENARIO_TWO_EFFECTS=match_row['EFFECTS'],
+                SCENARIO_ONE_COSTS=row['COSTS'],
+                SCENARIO_TWO_COSTS=match_row['COSTS']
             )
             comparisons.append(comparison)
 
