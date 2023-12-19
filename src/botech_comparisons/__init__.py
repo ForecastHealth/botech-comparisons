@@ -22,7 +22,7 @@ from .comparisons import (
 
 
 def create_tables(
-    configuration: str,
+    configuration: dict,
     data: pd.DataFrame
 ):
     """
