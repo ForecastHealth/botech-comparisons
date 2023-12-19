@@ -1,6 +1,10 @@
 {
 	"scenarios": [0, 1],
+	"groups": [
+		["region", "income"]
+	],
 	"filters": {
-		"country": ["USA"]
+		"income": ["HIGH INCOME"],
+		"region": ["NORTH AMERICA"]
 	}
 }

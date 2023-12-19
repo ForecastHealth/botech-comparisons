@@ -23,22 +23,18 @@ class Record:
 class Comparison:
     AUTHOR: str
     COUNTRY: str
+    REGION: str
+    INCOME: str
+    APPENDIX_3: bool
     INTERVENTION: str
     SCENARIO_ONE: str
     SCENARIO_TWO: str
-    TIMESTAMP: datetime.datetime
     NET_EFFECTS: float
     NET_COSTS: float
     COST_EFFECTIVENESS: float = field(init=False)
 
     def __post_init__(self):
         self.COST_EFFECTIVENESS = self.NET_EFFECTS / self.NET_COSTS
-
-
-class Group(Enum):
-    REGION = 1
-    INCOME = 2
-    APPENDIX_3 = 3
 
 
 class Filter(Enum):

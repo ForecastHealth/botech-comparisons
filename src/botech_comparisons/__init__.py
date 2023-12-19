@@ -7,31 +7,37 @@ import pandas as pd
 from typing import Dict, Tuple, List, Optional
 from .methods import (
     create_wish_list,
-    create_realistic_table
+    create_realistic_table,
+    make_comparisons,
+    group_comparisons,
+    convert_comparisons_to_tables
 )
-from .datatypes import Filter, Group
+from .datatypes import Filter
 
 
 def create_tables(
     data: pd.DataFrame,
     scenarios: Tuple[str],
     filters: Optional[Dict[Filter, List[str]]] = None,
-    groupings: Optional[List[Group]] = None
+    groups: Optional[List[List[Filter]]] = None
 ):
     """
     Produce a list of tables (dataframes) of compared results.
     """
     wish_list = create_wish_list(data, scenarios, filters)
     table = create_realistic_table(data, wish_list, scenarios)
-    return table
-    # table = make_comparisons(table)
-    # tables = group_tables(table, groupings)
-    # return tables
+    comparisons = make_comparisons(table, scenarios)
+    if groups:
+        grouped_comparisons = group_comparisons(comparisons, groups)
+        # tables = convert_comparisons_to_tables(grouped_comparisons)
+    # else:
+    #     tables = convert_comparisons_to_tables([comparisons])
+    return grouped_comparisons
 
 
 def parse_configuration(
     configuration: dict
-) -> Tuple[tuple, Optional[dict], Optional[dict]]:
+) -> Tuple[tuple, Optional[dict], Optional[list]]:
     """
     Given a configuration, return the appropriate data structures.
     """
@@ -45,10 +51,10 @@ def parse_configuration(
         filters = None
 
     if "groups" in configuration:
-        groups = {
-            Group[group.upper()]: values
-            for group, values in configuration["groups"].items()
-        }
+        groups = [
+            [Filter[group.upper()] for group in arrangement]
+            for arrangement in configuration["groups"]
+        ]
     else:
         groups = None
     return scenarios, filters, groups

@@ -10,10 +10,10 @@
             "args": [ ]
         },
         {
-            "name": "Matched Table",
+            "name": "Main API",
             "type": "python",
             "request": "launch",
-            "module": "scripts.matched",
+            "module": "scripts.main",
             "justMyCode": true,
             "args": []
         }
