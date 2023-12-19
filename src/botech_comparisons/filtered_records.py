@@ -50,7 +50,6 @@ def create_filtered_records(
     blueprint: List[Record],
     scenarios: Tuple[str]
 ) -> pd.DataFrame:
-    ANNOTATION = "filtered records"
     table = _match_source_with_blueprint(df, blueprint)
     table = _remove_invalid_comparisons(table, scenarios)
     table = _remove_older_entries(table)
@@ -62,8 +61,8 @@ def create_filtered_records(
             row["INTERVENTION"],
             row["SCENARIO"],
             row["TIMESTAMP"],
-            row["EFFECT"],
-            row["COST"],
+            row["EFFECTS"],
+            row["COSTS"]
         )
         records.append(record)
-    return ANNOTATION, table
+    return records
