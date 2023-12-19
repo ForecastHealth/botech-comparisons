@@ -29,10 +29,10 @@ def create_tables(
     comparisons = make_comparisons(table, scenarios)
     if groups:
         grouped_comparisons = group_comparisons(comparisons, groups)
-        # tables = convert_comparisons_to_tables(grouped_comparisons)
-    # else:
-    #     tables = convert_comparisons_to_tables([comparisons])
-    return grouped_comparisons
+        tables = convert_comparisons_to_tables(grouped_comparisons)
+    else:
+        tables = convert_comparisons_to_tables([comparisons])
+    return tables
 
 
 def parse_configuration(

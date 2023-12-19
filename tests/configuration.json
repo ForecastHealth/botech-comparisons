@@ -5,6 +5,6 @@
 	],
 	"filters": {
 		"income": ["HIGH INCOME"],
-		"region": ["NORTH AMERICA"]
+		"intervention": [0]
 	}
 }

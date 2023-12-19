@@ -10,6 +10,7 @@ from botech_metadata import _records as _country_records
 from botech_metadata.countries import Country
 from botech_metadata import countries as metadata
 from itertools import product
+from dataclasses import asdict
 
 
 def create_wish_list(
@@ -218,7 +219,7 @@ def make_comparisons(df, scenarios: Tuple[str]) -> List[Comparison]:
 
 
 def group_comparisons(
-    comparisons: List[Comparison], 
+    comparisons: List[Comparison],
     groups: List[List[Filter]]
 ) -> Dict[str, Dict[str, List[Comparison]]]:
 
@@ -252,7 +253,12 @@ def group_comparisons(
 
 
 def convert_comparisons_to_tables(
-    grouped_comparisons: List[List[Comparison]]
-) -> List[pd.DataFrame]:
-    ...
+    grouped_comparisons: Dict[str, Dict[str, List[Comparison]]]
+) -> List[Tuple[str, pd.DataFrame]]:
+    tables = []
+    for broad_group_label in grouped_comparisons:
+        for specific_group_label in grouped_comparisons[broad_group_label]:
+            table = pd.DataFrame([asdict(comp) for comp in grouped_comparisons[broad_group_label][specific_group_label]])
+            tables.append((broad_group_label, specific_group_label, table))
+    return tables
 
