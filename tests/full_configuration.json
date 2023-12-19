@@ -8,7 +8,6 @@
 	],
 	"filters": {
 		"author": [0, 1, 2, 3, 4],
-		"country": ["US", "ZW", "RU", "ID"],
 		"intervention": [0, 1],
 		"income": ["HIGH INCOME"],
 		"region": ["NORTH AMERICA"]

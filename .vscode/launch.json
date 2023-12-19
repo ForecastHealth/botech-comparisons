@@ -21,7 +21,7 @@
             "module": "unittest",
             "justMyCode": true,
             "args": [
-                "tests.test_api.TestBluePrint.test_csv"
+                "tests.test_api.TestComparisons.test_self"
             ]
         }
     ]

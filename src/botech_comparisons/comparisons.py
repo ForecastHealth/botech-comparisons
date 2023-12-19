@@ -3,15 +3,16 @@ comparisons.py
 
 Compare Records to produce Comparisons.
 """
-from .datatypes import Comparison, Filter
+from .datatypes import Comparison, Filter, Record
 from typing import Tuple, Dict, List
 import pandas as pd
+from dataclasses import asdict
 from botech_metadata import countries as metadata
 from itertools import product
 
 
 def create_comparisons(
-    filtered_records: pd.DataFrame,
+    filtered_records: List[Record],
     scenarios: Tuple[str]
 ) -> List[Comparison]:
     """
@@ -20,13 +21,15 @@ def create_comparisons(
     comparisons = []
     scenario_one, scenario_two = scenarios
 
-    for _, row in filtered_records.iterrows():
+    df = pd.DataFrame([asdict(record) for record in filtered_records])
+
+    for _, row in df.iterrows():
         if row['SCENARIO'] == scenario_one:
-            match = filtered_records[
-                (filtered_records['AUTHOR'] == row['AUTHOR'])
-                & (filtered_records['COUNTRY'] == row['COUNTRY'])
-                & (filtered_records['INTERVENTION'] == row['INTERVENTION'])
-                & (filtered_records['SCENARIO'] == scenario_two)
+            match = df[
+                (df['AUTHOR'] == row['AUTHOR'])
+                & (df['COUNTRY'] == row['COUNTRY'])
+                & (df['INTERVENTION'] == row['INTERVENTION'])
+                & (df['SCENARIO'] == scenario_two)
             ]
             match_row = match.iloc[0]
             net_effects = match_row['EFFECTS'] - row['EFFECTS']

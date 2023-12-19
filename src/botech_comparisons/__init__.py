@@ -59,15 +59,22 @@ def create_tables(
         blueprint = create_blueprint(data, scenarios, filters)
         filtered_records = create_filtered_records(data, blueprint, scenarios)
         comparisons = create_comparisons(filtered_records, scenarios)
-        grouped_comparisons = create_grouped_comparisons(comparisons, groups)
-        for group in grouped_comparisons:
-            for subgroup in grouped_comparisons[group]:
-                annotation = f"{group} - {subgroup}"
-                return convert_elements_to_format(
-                    elements=grouped_comparisons[group][subgroup],
-                    format=data_format,
-                    annotation=annotation
-                )
+        if groups:
+            grouped_comparisons = create_grouped_comparisons(comparisons, groups)
+            for group in grouped_comparisons:
+                for subgroup in grouped_comparisons[group]:
+                    annotation = f"{group} - {subgroup}"
+                    return convert_elements_to_format(
+                        elements=grouped_comparisons[group][subgroup],
+                        format=data_format,
+                        annotation=annotation
+                    )
+        else:
+            return convert_elements_to_format(
+                elements=comparisons,
+                format=data_format,
+                annotation="Comparisons"
+            )
     else:
         raise ValueError(f"Unknown data type: {data_type}")
 
