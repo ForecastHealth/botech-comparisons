@@ -100,3 +100,30 @@ class TestBluePrint(unittest.TestCase):
             data=self.mock_data
         )
         self.assertIsInstance(baz, str)
+
+    def test_df(self):
+        kwargs = {
+            "data_type": "blueprint",
+            "data_format": "dataframe"
+        }
+
+        configuration = self.load_configuration(self.configuration_sml, **kwargs)
+        foo = create_tables(
+            configuration=configuration,
+            data=self.mock_data
+        )
+        self.assertIsInstance(foo, pd.DataFrame)
+
+        configuration = self.load_configuration(self.configuration_med, **kwargs)
+        bar = create_tables(
+            configuration=configuration,
+            data=self.mock_data
+        )
+        self.assertIsInstance(bar, pd.DataFrame)
+
+        configuration = self.load_configuration(self.configuration_lrg, **kwargs)
+        baz = create_tables(
+            configuration=configuration,
+            data=self.mock_data
+        )
+        self.assertIsInstance(baz, pd.DataFrame)

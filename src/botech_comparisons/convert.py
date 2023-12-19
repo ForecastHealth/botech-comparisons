@@ -27,6 +27,8 @@ def convert_elements_to_format(
 
     df = pd.DataFrame([asdict(element) for element in elements])
     df.name = annotation
+    if format == "dataframe":
+        return df
     if format == "csv":
         return df.to_csv(index=False)
     elif format == "html":
