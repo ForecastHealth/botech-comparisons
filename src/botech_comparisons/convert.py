@@ -1,5 +1,5 @@
 from typing import List, Union
-from .data import Comparison, Record
+from .datatypes import Comparison, Record
 from dataclasses import asdict
 import pandas as pd
 
@@ -18,10 +18,13 @@ def convert_elements_to_format(
         A list of Records or Comparisons.
     format: str
         The format to convert the elements to.
-        Either "csv" or "html"
+        Either "self" or "csv" or "html"
     annotation: str
         The annotation to (possibly) add to the table.
     """
+    if format == "self":
+        return elements
+
     df = pd.DataFrame([asdict(element) for element in elements])
     df.name = annotation
     if format == "csv":

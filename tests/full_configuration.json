@@ -1,0 +1,16 @@
+{
+	"scenarios": [0, 1],
+	"groups": [
+		["author"],
+		["region"],
+		["income", "region"],
+		["region", "income", "appendix_3"]
+	],
+	"filters": {
+		"author": [0, 1, 2, 3, 4],
+		"country": ["US", "ZW", "RU", "ID"],
+		"intervention": [0, 1],
+		"income": ["HIGH INCOME"],
+		"region": ["NORTH AMERICA"]
+	}
+}

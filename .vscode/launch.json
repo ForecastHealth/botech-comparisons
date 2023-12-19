@@ -2,20 +2,27 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Hypothetical Table",
-            "type": "python",
-            "request": "launch",
-            "module": "scripts.wishlist",
-            "justMyCode": true,
-            "args": [ ]
-        },
-        {
             "name": "Main API",
             "type": "python",
             "request": "launch",
             "module": "scripts.main",
             "justMyCode": true,
-            "args": []
+            "args": [
+                "./tests/configuration.json",
+                "./tests/MOCK_DATA.csv",
+                "blueprint",
+                "self"
+            ]
+        },
+        {
+            "name": "Unittest",
+            "type": "python",
+            "request": "launch",
+            "module": "unittest",
+            "justMyCode": true,
+            "args": [
+                "tests.test_api.TestBluePrint.test_csv"
+            ]
         }
     ]
 }

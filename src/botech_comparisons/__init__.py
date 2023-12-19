@@ -6,7 +6,7 @@ Compare model runs from arbitrary lists of summarised results.
 import pandas as pd
 from typing import Tuple, List, Optional
 from .datatypes import Filter
-from .export import (
+from .convert import (
     convert_elements_to_format,
 )
 from .blueprint import (
@@ -22,8 +22,8 @@ from .comparisons import (
 
 
 def create_tables(
-    configuration_filepath: str,
-    data_filepath: str
+    configuration: str,
+    data: pd.DataFrame
 ):
     """
     High level API.
@@ -38,22 +38,21 @@ def create_tables(
         scenarios,
         filters,
         groups,
-    ) = parse_configuration(configuration_filepath)
-    data = pd.read_csv(data_filepath)
+    ) = parse_configuration(configuration)
 
     if data_type == "blueprint":
         blueprint = create_blueprint(data, scenarios, filters)
         return convert_elements_to_format(
-            records=blueprint,
-            format=format,
+            elements=blueprint,
+            format=data_format,
             annotation="Blueprint"
         )
     elif data_type == "filtered_records":
         blueprint = create_blueprint(data, scenarios, filters)
         filtered_records = create_filtered_records(data, blueprint, scenarios)
         return convert_elements_to_format(
-            records=filtered_records,
-            format=format,
+            elements=filtered_records,
+            format=data_format,
             annotation="Filtered Records"
         )
     elif data_type == "comparisons":
@@ -64,9 +63,9 @@ def create_tables(
         for group in grouped_comparisons:
             for subgroup in grouped_comparisons[group]:
                 annotation = f"{group} - {subgroup}"
-                yield convert_elements_to_format(
-                    comparisons=grouped_comparisons[group][subgroup],
-                    format=format,
+                return convert_elements_to_format(
+                    elements=grouped_comparisons[group][subgroup],
+                    format=data_format,
                     annotation=annotation
                 )
     else:
@@ -79,8 +78,8 @@ def parse_configuration(
     """
     Given a configuration, return the appropriate data structures.
     """
-    data_type = configuration["data_type"],
-    data_format = configuration["data_format"],
+    data_type = configuration["data_type"]
+    data_format = configuration["data_format"]
     scenarios = tuple(configuration["scenarios"])
     if "filters" in configuration:
         filters = {

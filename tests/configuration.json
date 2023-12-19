@@ -1,12 +1,5 @@
 {
-	"data_types": "blueprint",
-	"data_format": "csv",
 	"scenarios": [0, 1],
-	"groups": [
-		["region", "income"]
-	],
-	"filters": {
-		"income": ["HIGH INCOME"],
-		"intervention": [0]
-	}
+	"groups": [],
+	"filters": {}
 }

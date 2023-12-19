@@ -3,7 +3,7 @@ comparisons.py
 
 Compare Records to produce Comparisons.
 """
-from .data_types import Comparison, Filter
+from .datatypes import Comparison, Filter
 from typing import Tuple, Dict, List
 import pandas as pd
 from botech_metadata import countries as metadata

@@ -1,0 +1,10 @@
+{
+	"scenarios": [0, 1],
+	"groups": [
+		["region", "income"]
+	],
+	"filters": {
+		"income": ["HIGH INCOME"],
+		"intervention": [0]
+	}
+}
