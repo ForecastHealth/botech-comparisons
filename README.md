@@ -1,4 +1,5 @@
 # botech comparisons
+[![asciicast](https://asciinema.org/a/tbWegFJBh7Rk7bBg6VRZ2LAgF.svg)](https://asciinema.org/a/tbWegFJBh7Rk7bBg6VRZ2LAgF)
 ## Description
 Generate tables of results, which are extracted from a data source.
 - These can be different datatypes: 
