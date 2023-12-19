@@ -1,21 +1,21 @@
 """
 filtered_records.py
 
-Given a wishlist, return the records which actually appear in the data source.
+Given a blueprint, return the records which actually appear in the data source.
 """
 import pandas as pd
 from .datatypes import Record
 from typing import List, Tuple
 
 
-def _match_source_with_wish_list(
+def _match_source_with_blueprint(
     source: pd.DataFrame,
-    wish_list: List[Record]
+    blueprint: List[Record]
 ) -> pd.DataFrame:
     """
     Match a source of data with a wish list of records.
     """
-    target = pd.DataFrame(wish_list)
+    target = pd.DataFrame(blueprint)
     condition = (
         source['AUTHOR'].isin(target['AUTHOR']) &
         source['COUNTRY'].isin(target['COUNTRY']) &
@@ -45,13 +45,25 @@ def _remove_older_entries(df: pd.DataFrame):
     return df
 
 
-
 def create_filtered_records(
     df: pd.DataFrame,
-    wish_list: List[Record],
+    blueprint: List[Record],
     scenarios: Tuple[str]
 ) -> pd.DataFrame:
-    table = _match_source_with_wish_list(df, wish_list)
+    ANNOTATION = "filtered records"
+    table = _match_source_with_blueprint(df, blueprint)
     table = _remove_invalid_comparisons(table, scenarios)
     table = _remove_older_entries(table)
-    return table
+    records = []
+    for _, row in table.iterrows():
+        record = Record(
+            row["AUTHOR"],
+            row["COUNTRY"],
+            row["INTERVENTION"],
+            row["SCENARIO"],
+            row["TIMESTAMP"],
+            row["EFFECT"],
+            row["COST"],
+        )
+        records.append(record)
+    return ANNOTATION, table

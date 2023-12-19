@@ -1,9 +1,9 @@
 """
-wishlist.py
+blueprint.py
 
-The methods associated with creating a wishlist.
+The methods associated with creating a blueprint.
 
-A wishlist is a list of records that should be looked for 
+A blueprint is a list of records that should be looked for 
 in the data source. It refers to the product of every filtered
 value of interest.
 """
@@ -115,9 +115,7 @@ def _create_all_record_combinations(
     return records
 
 
-
-
-def create_wish_list(
+def create_blueprint(
     df: pd.DataFrame,
     scenarios: Tuple[str],
     filters: Optional[Dict[Filter, List[str]]] = None
@@ -129,5 +127,3 @@ def create_wish_list(
     filtered_values = _determine_filtered_values(df, filters)
     records = _create_all_record_combinations(scenarios, filtered_values)
     return records
-
-

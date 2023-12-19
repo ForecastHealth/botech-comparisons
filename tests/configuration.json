@@ -1,5 +1,5 @@
 {
-	"data_types": "wishlist",
+	"data_types": "blueprint",
 	"data_format": "csv",
 	"scenarios": [0, 1],
 	"groups": [

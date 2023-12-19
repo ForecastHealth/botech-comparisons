@@ -4,7 +4,7 @@ import json
 warnings.filterwarnings("ignore")
 
 
-class TestWishlist(unittest.TestCase):
+class TestBluePrint(unittest.TestCase):
     def setUp(self):
         ...
 

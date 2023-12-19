@@ -6,10 +6,19 @@ Compare model runs from arbitrary lists of summarised results.
 import pandas as pd
 from typing import Tuple, List, Optional
 from .datatypes import Filter
-from .export import convert_objects_to_format
-from .wishlist import create_wish_list
-from .filtered_records import create_filtered_records
-from .comparisons import create_comparisons, create_grouped_comparisons
+from .export import (
+    convert_elements_to_format,
+)
+from .blueprint import (
+    create_blueprint,
+)
+from .filtered_records import (
+    create_filtered_records,
+)
+from .comparisons import (
+    create_comparisons,
+    create_grouped_comparisons,
+)
 
 
 def create_tables(
@@ -17,7 +26,11 @@ def create_tables(
     data_filepath: str
 ):
     """
-    High level API - handles unpacking, parsing etc.
+    High level API.
+
+    Parses a configuration file,
+    generates desired elements (blueprint, filtered_records, comparisons),
+    returns them as a particular format.
     """
     (
         data_type,
@@ -28,19 +41,34 @@ def create_tables(
     ) = parse_configuration(configuration_filepath)
     data = pd.read_csv(data_filepath)
 
-    if data_type == "wishlist":
-        wish_list = create_wish_list(data, scenarios, filters)
-        return convert_objects_to_format(wish_list, format)
+    if data_type == "blueprint":
+        blueprint = create_blueprint(data, scenarios, filters)
+        return convert_elements_to_format(
+            records=blueprint,
+            format=format,
+            annotation="Blueprint"
+        )
     elif data_type == "filtered_records":
-        wish_list = create_wish_list(data, scenarios, filters)
-        filtered_records = create_filtered_records(data, wish_list, scenarios)
-        return convert_objects_to_format(filtered_records, format)
+        blueprint = create_blueprint(data, scenarios, filters)
+        filtered_records = create_filtered_records(data, blueprint, scenarios)
+        return convert_elements_to_format(
+            records=filtered_records,
+            format=format,
+            annotation="Filtered Records"
+        )
     elif data_type == "comparisons":
-        wish_list = create_wish_list(data, scenarios, filters)
-        filtered_records = create_filtered_records(data, wish_list, scenarios)
+        blueprint = create_blueprint(data, scenarios, filters)
+        filtered_records = create_filtered_records(data, blueprint, scenarios)
         comparisons = create_comparisons(filtered_records, scenarios)
         grouped_comparisons = create_grouped_comparisons(comparisons, groups)
-        return convert_objects_to_format(grouped_comparisons, format)
+        for group in grouped_comparisons:
+            for subgroup in grouped_comparisons[group]:
+                annotation = f"{group} - {subgroup}"
+                yield convert_elements_to_format(
+                    comparisons=grouped_comparisons[group][subgroup],
+                    format=format,
+                    annotation=annotation
+                )
     else:
         raise ValueError(f"Unknown data type: {data_type}")
 
