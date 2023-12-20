@@ -59,13 +59,16 @@ def create_tables(
 
     if groups:
         grouped_elements = group_elements(groups, elements)
+        all_tables = {}
         for broad_label in grouped_elements:
             for narrow_label in grouped_elements[broad_label]:
-                return convert_elements_to_format(
+                key = f"{broad_label}_{narrow_label}"
+                all_tables[key] = convert_elements_to_format(
                     elements=grouped_elements[broad_label][narrow_label],
                     format=data_format,
                     annotation=data_format
                 )
+        return all_tables
 
     return convert_elements_to_format(
         elements=elements,

@@ -9,29 +9,35 @@ def convert_elements_to_format(
     format: str,
     annotation: str
 ):
-    """
-    Convert a list of Records or Comparisons.
+    if elements and isinstance(elements[0], Comparison):
+        data = []
+        for comparison in elements:
+            # Create unique keys for each field in SCENARIO_ONE and SCENARIO_TWO
+            s1_data = {f"S1_{k}": v for k, v in asdict(comparison.SCENARIO_ONE).items()}
+            s2_data = {f"S2_{k}": v for k, v in asdict(comparison.SCENARIO_TWO).items()}
 
-    Parameters:
-    -----------
-    elements: List[Record] or List[Comparison]
-        A list of Records or Comparisons.
-    format: str
-        The format to convert the elements to.
-        Either "self" or "csv" or "html"
-    annotation: str
-        The annotation to (possibly) add to the table.
-    """
-    if format == "self":
-        return elements
+            # Merge data and add comparison specific fields
+            row = {**s1_data, **s2_data,
+                   'NET_EFFECTS': comparison.NET_EFFECTS,
+                   'NET_COSTS': comparison.NET_COSTS,
+                   'COST_EFFECTIVENESS': comparison.COST_EFFECTIVENESS}
+            data.append(row)
+        df = pd.DataFrame(data)
+    else:
+        df = pd.DataFrame([asdict(element) for element in elements])
 
-    df = pd.DataFrame([asdict(element) for element in elements])
     df.name = annotation
+
+    # Convert DataFrame to the specified format
     if format == "dataframe":
         return df
-    if format == "csv":
+    elif format == "csv":
         return df.to_csv(index=False)
     elif format == "html":
         return df.to_html(index=False)
+    elif format == "self":
+        return elements
     else:
         raise ValueError(f"Unknown format: {format}")
+
+
