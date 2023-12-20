@@ -1,0 +1,7 @@
+{
+	"scenarios": [0, 1],
+	"filters": {
+		"income": ["Low income"],
+		"INTERVENTION": [0]
+	}
+}
