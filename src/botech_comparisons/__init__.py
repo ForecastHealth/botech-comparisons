@@ -17,7 +17,9 @@ from .filtered_records import (
 )
 from .comparisons import (
     create_comparisons,
-    create_grouped_comparisons,
+)
+from .groups import (
+    group_elements
 )
 
 
@@ -40,48 +42,22 @@ def create_tables(
         groups,
     ) = parse_configuration(configuration)
 
-    if data_type == "blueprint":
-        blueprint = create_blueprint(data, scenarios, filters)
-        return convert_elements_to_format(
-            elements=blueprint,
-            format=data_format,
-            annotation="Blueprint"
-        )
-    elif data_type == "filtered_records":
-        blueprint = create_blueprint(data, scenarios, filters)
-        filtered_records = create_filtered_records(data, blueprint, scenarios)
-        return convert_elements_to_format(
-            elements=filtered_records,
-            format=data_format,
-            annotation="Filtered Records"
-        )
-    elif data_type == "comparisons":
-        blueprint = create_blueprint(data, scenarios, filters)
-        filtered_records = create_filtered_records(data, blueprint, scenarios)
+    # blueprint = create_blueprint(data, scenarios, filters)
+    records = create_filtered_records(data, blueprint, scenarios)
+
+    if data_type == "comparisons":
         comparisons = create_comparisons(filtered_records, scenarios)
-        return convert_elements_to_format(
-            elements=comparisons,
-            format=data_format,
-            annotation="Comparisons"
-        )
-        # if groups:
-        #     grouped_comparisons = create_grouped_comparisons(comparisons, groups)
-        #     for group in grouped_comparisons:
-        #         for subgroup in grouped_comparisons[group]:
-        #             annotation = f"{group} - {subgroup}"
-        #             return convert_elements_to_format(
-        #                 elements=grouped_comparisons[group][subgroup],
-        #                 format=data_format,
-        #                 annotation=annotation
-        #             )
-        # else:
-        #     return convert_elements_to_format(
-        #         elements=comparisons,
-        #         format=data_format,
-        #         annotation="Comparisons"
-        #     )
+        elements = comparisons
     else:
         raise ValueError(f"Unknown data type: {data_type}")
+
+    # if groups:
+    #     grouped_elements = group_elements(groups, elements)
+    return convert_elements_to_format(
+        elements=elements,
+        format=data_format,
+        annotation=data_format
+        )
 
 
 def parse_configuration(

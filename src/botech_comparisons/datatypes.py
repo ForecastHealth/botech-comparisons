@@ -3,6 +3,7 @@ datatypes.py
 
 Defining our datastructures
 """
+from botech_metadata import countries as metadata
 from typing import Optional
 from enum import Enum
 from dataclasses import dataclass, field
@@ -18,7 +19,15 @@ class Record:
     TIMESTAMP: datetime.datetime
     EFFECTS: float
     COSTS: float
+    REGION: str = field(init=False)
+    INCOME: str = field(init=False)
+    APPENDIX_3: str = field(init=False)
     UID: Optional[str] = None
+
+    def __post_init__(self):
+        self.REGION = metadata.get(self.COUNTRY).region
+        self.INCOME = metadata.get(self.COUNTRY).income
+        self.APPENDIX_3 = metadata.get(self.COUNTRY).appendix_3
 
 
 @dataclass

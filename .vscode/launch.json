@@ -10,7 +10,7 @@
             "args": [
                 "./tests/configuration.json",
                 "./tests/MOCK_DATA.csv",
-                "blueprint",
+                "comparisons",
                 "self"
             ]
         },
