@@ -12,20 +12,13 @@ from itertools import product
 def group_elements(
     groups: List[List[Filter]],
     elements: List[Union[Comparison, Record]]
-):
+) -> Dict[str, Dict[str, List[Union[Comparison, Record]]]]:
     """
     Group elements together based on common properties.
     """
-    ...
 
-
-def create_grouped_comparisons(
-    comparisons: List[Comparison],
-    groups: List[List[Filter]]
-) -> Dict[str, Dict[str, List[Comparison]]]:
-
-    def get_unique_values(comparisons, filter_name):
-        return set(getattr(comp, filter_name) for comp in comparisons)
+    def get_unique_values(elements, filter_name):
+        return set(getattr(elem, filter_name) for elem in elements)
 
     filter_to_attr = {
         Filter.AUTHOR: 'AUTHOR',
@@ -36,18 +29,39 @@ def create_grouped_comparisons(
         Filter.APPENDIX_3: 'APPENDIX_3'
     }
 
-    grouped_comparisons = {}
+    grouped_elements = {}
     for group in groups:
         group_key = ', '.join(filter_to_attr[f] for f in group)
-        grouped_comparisons[group_key] = {}
-        unique_values = [get_unique_values(comparisons, filter_to_attr[f]) for f in group]
+        grouped_elements[group_key] = {}
+
+        if all(isinstance(elem, Record) for elem in elements):
+            unique_values = [
+                get_unique_values(elements, filter_to_attr[f])
+                for f in group
+            ]
+        elif all(isinstance(elem, Comparison) for elem in elements):
+            records = [
+                comp.SCENARIO_ONE
+                for comp in elements
+            ] + [
+                comp.SCENARIO_TWO
+                for comp in elements
+            ]
+            unique_values = [
+                get_unique_values(records, filter_to_attr[f])
+                for f in group
+            ]
+        else:
+            raise ValueError("Elements must be all Comparisons or all Records")
+
         combinations = product(*unique_values)
         for combo in combinations:
             combo_key = ', '.join(str(item) for item in combo)
-            filtered_comps = [
-                comp
-                for comp in comparisons
-                if all(getattr(comp, filter_to_attr[group[i]]) == combo[i] for i in range(len(group)))
+            filtered_elements = [
+                elem
+                for elem in elements
+                if all(getattr(elem if isinstance(elem, Record) else getattr(elem, 'SCENARIO_ONE'), filter_to_attr[group[i]]) == combo[i] for i in range(len(group)))
             ]
-            grouped_comparisons[group_key][combo_key] = filtered_comps
-    return grouped_comparisons
+            grouped_elements[group_key][combo_key] = filtered_elements
+
+    return grouped_elements

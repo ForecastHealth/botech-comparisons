@@ -57,8 +57,16 @@ def create_tables(
     else:
         raise ValueError(f"Unknown data type: {data_type}")
 
-    # if groups:
-    #     grouped_elements = group_elements(groups, elements)
+    if groups:
+        grouped_elements = group_elements(groups, elements)
+        for broad_label in grouped_elements:
+            for narrow_label in grouped_elements[broad_label]:
+                return convert_elements_to_format(
+                    elements=grouped_elements[broad_label][narrow_label],
+                    format=data_format,
+                    annotation=data_format
+                )
+
     return convert_elements_to_format(
         elements=elements,
         format=data_format,
