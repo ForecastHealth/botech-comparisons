@@ -12,8 +12,9 @@ from .convert import (
 from .blueprint import (
     create_blueprint,
 )
-from .filtered_records import (
-    create_filtered_records,
+from .records import (
+    create_records,
+    filter_records
 )
 from .comparisons import (
     create_comparisons,
@@ -31,7 +32,7 @@ def create_tables(
     High level API.
 
     Parses a configuration file,
-    generates desired elements (blueprint, filtered_records, comparisons),
+    generates desired elements: records, comparisons
     returns them as a particular format.
     """
     (
@@ -42,11 +43,16 @@ def create_tables(
         groups,
     ) = parse_configuration(configuration)
 
-    # blueprint = create_blueprint(data, scenarios, filters)
-    records = create_filtered_records(data, blueprint, scenarios)
+    records = create_records(data)
+    filtered_records = filter_records(records, scenarios, filters)
+    if not filtered_records:
+        raise ValueError("No records matched the filters provided.")
 
-    if data_type == "comparisons":
-        comparisons = create_comparisons(filtered_records, scenarios)
+    if data_type == "records":
+        elements = filtered_records
+
+    elif data_type == "comparisons":
+        comparisons = create_comparisons(records, scenarios)
         elements = comparisons
     else:
         raise ValueError(f"Unknown data type: {data_type}")

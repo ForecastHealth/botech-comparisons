@@ -9,7 +9,7 @@
 	"filters": {
 		"author": [0, 1, 2, 3, 4],
 		"intervention": [0, 1],
-		"income": ["HIGH INCOME"],
-		"region": ["NORTH AMERICA"]
+		"income": ["High income"],
+		"region": ["North America"]
 	}
 }

@@ -21,7 +21,7 @@ def main():
     configuration["data_type"] = data_type
     configuration["data_format"] = data_format
 
-    df = pd.read_csv(mock_data_filepath)
+    df = pd.read_csv(mock_data_filepath, keep_default_na=False)
 
     foo = create_tables(configuration, df)
     pprint.pprint(foo)

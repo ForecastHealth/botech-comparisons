@@ -8,7 +8,7 @@
             "module": "scripts.main",
             "justMyCode": true,
             "args": [
-                "./tests/configuration.json",
+                "./tests/minimal_configuration.json",
                 "./tests/MOCK_DATA.csv",
                 "comparisons",
                 "self"
