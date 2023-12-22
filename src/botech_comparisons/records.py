@@ -11,14 +11,16 @@ from typing import List, Tuple, Dict, Optional
 def create_records(df: pd.DataFrame) -> List[Record]:
     records = []
     for _, row in df.iterrows():
+        uid = row.get("UID", None)
         record = Record(
-            row["AUTHOR"],
-            row["COUNTRY"],
-            row["INTERVENTION"],
-            row["SCENARIO"],
-            row["TIMESTAMP"],
-            row["EFFECTS"],
-            row["COSTS"]
+            UID=uid,
+            AUTHOR=row["AUTHOR"],
+            COUNTRY=row["COUNTRY"],
+            INTERVENTION=row["INTERVENTION"],
+            SCENARIO=row["SCENARIO"],
+            TIMESTAMP=row["TIMESTAMP"],
+            EFFECTS=row["EFFECTS"],
+            COSTS=row["COSTS"],
         )
         records.append(record)
     return records
