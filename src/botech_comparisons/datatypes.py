@@ -25,10 +25,15 @@ class Record:
     UID: Optional[str] = None
 
     def __post_init__(self):
-        country_metadata = metadata.get(self.COUNTRY)
-        self.REGION = country_metadata.region
-        self.INCOME = country_metadata.income
-        self.APPENDIX_3 = country_metadata.appendix_3
+        try:
+            country_metadata = metadata.get(self.COUNTRY)
+            self.REGION = country_metadata.region
+            self.INCOME = country_metadata.income
+            self.APPENDIX_3 = country_metadata.appendix_3
+        except KeyError:
+            self.REGION = None
+            self.INCOME = None
+            self.APPENDIX_3 = None
 
 
 @dataclass
