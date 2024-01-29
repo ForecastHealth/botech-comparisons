@@ -10,9 +10,8 @@ value of interest.
 from .datatypes import Filter, Record
 import pandas as pd
 from typing import Dict, List, Optional, Tuple
-from botech_metadata import _records as _country_records
-from botech_metadata.countries import Country
-from botech_metadata import countries as metadata
+import country_metadata
+from country_metadata.country import Country
 from itertools import product
 
 
@@ -46,21 +45,21 @@ def _filter_countries(filters: Dict[Filter, List[str]]) -> List[Country]:
     # REGION filter
     regions = filters.get(Filter.REGION, [])
     if regions:
-        mapping = metadata.countries_by_category("region")
+        mapping = country_metadata.get_countries_by_tags("region")
         countries_by_region = {country.alpha2 for region in regions for country in mapping[region]}
         country_sets.append(countries_by_region)
 
     # INCOME filter
     incomes = filters.get(Filter.INCOME, [])
     if incomes:
-        mapping = metadata.countries_by_category("income")
+        mapping = country_metadata.get_countries_by_tags("income")
         countries_by_income = {country.alpha2 for income in incomes for country in mapping[income]}
         country_sets.append(countries_by_income)
 
     # APPENDIX_3 filter
     appendix_3s = filters.get(Filter.APPENDIX_3, [])
     if appendix_3s:
-        mapping = metadata.countries_by_category("appendix_3")
+        mapping = country_metadata.get_countries_by_tags("appendix_3")
         countries_by_appendix_3 = {country.alpha2 for appendix_3 in appendix_3s for country in mapping[appendix_3]}
         country_sets.append(countries_by_appendix_3)
 
@@ -69,7 +68,7 @@ def _filter_countries(filters: Dict[Filter, List[str]]) -> List[Country]:
         countries = set()
         for country in filters[Filter.COUNTRY]:
             try:
-                countries.add(metadata.get(country).alpha2)
+                countries.add(country_metadata.get_country(country).alpha2)
             except KeyError:
                 pass
         country_sets.append(countries)
@@ -79,7 +78,7 @@ def _filter_countries(filters: Dict[Filter, List[str]]) -> List[Country]:
         all_countries = set.intersection(*country_sets)
     else:
         # If no filters, return all countries
-        all_countries = {country.alpha2 for country in _country_records}
+        all_countries = {country.alpha2 for country in country_metadata.countries}
 
     return list(all_countries)
 

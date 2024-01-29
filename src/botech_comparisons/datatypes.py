@@ -3,7 +3,7 @@ datatypes.py
 
 Defining our datastructures
 """
-from botech_metadata import countries as metadata
+import country_metadata
 from typing import Optional
 from enum import Enum
 from dataclasses import dataclass, field
@@ -26,13 +26,16 @@ class Record:
 
     def __post_init__(self):
         try:
-            country_metadata = metadata.get(self.COUNTRY)
-            self.REGION = country_metadata.region
-            self.INCOME = country_metadata.income
-            self.APPENDIX_3 = country_metadata.appendix_3
+            self.REGION = country_metadata.get_tag(self.COUNTRY, "wb_region")
         except KeyError:
             self.REGION = None
+        try:
+            self.INCOME = country_metadata.get_tag(self.COUNTRY, "wb_income")
+        except KeyError:
             self.INCOME = None
+        try:
+            self.APPENDIX_3 = country_metadata.get_tag(self.COUNTRY, "appendix_3")
+        except KeyError:
             self.APPENDIX_3 = None
 
 

@@ -25,7 +25,7 @@ I was frustrated with hard coding comparisons, and felt there was a better way t
 ## Installation
 ### Requirements
 - Python (built with 3.10.12)
-- [botech-metadata](https://github.com/ForecastHealth/botech-metadata)
+- [country-metadata](https://github.com/ForecastHealth/country-metadata)
 - pandas
 
 ### Setup
